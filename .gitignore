@@ -44,6 +44,7 @@ ENV/
 
 # Documentation
 site/
+_site/
 docs/_build/
 
 # OS

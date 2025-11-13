@@ -685,7 +685,7 @@ def _(
         #### Installation
 
         ```bash
-        pip install "git+https://github.com/yourname/dubois-style.git"
+        pip install "git+https://github.com/Shakes-tzd/dubois-style.git"
         ```
 
         #### Basic Usage
@@ -707,7 +707,7 @@ def _(
 
         - [Du Bois Challenge](https://duboischallenge.com/)
         - [W.E.B. Du Bois' Data Portraits](https://www.princeton.edu/news/2018/11/13/we-b-du-boiss-data-portraits-visualizing-black-america)
-        - [GitHub Repository](https://github.com/yourname/dubois-style)
+        - [GitHub Repository](https://github.com/Shakes-tzd/dubois-style)
         """),
         },
         value="📊 Basic Examples",

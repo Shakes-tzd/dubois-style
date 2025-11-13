@@ -10,16 +10,18 @@ This package provides a Matplotlib style inspired by W.E.B. Du Bois' data visual
 
 ## Installation
 
+**📺 [View Live Demo Gallery](https://shakes-tzd.github.io/dubois-style/)**
+
 Install directly from GitHub:
 
 ```bash
-pip install "git+https://github.com/yourname/dubois-style.git"
+pip install "git+https://github.com/Shakes-tzd/dubois-style.git"
 ```
 
 Or clone the repository and install in development mode:
 
 ```bash
-git clone https://github.com/yourname/dubois-style.git
+git clone https://github.com/Shakes-tzd/dubois-style.git
 cd dubois-style
 pip install -e .
 ```
@@ -267,9 +269,9 @@ If you use this package in your work, please consider citing it:
 ```bibtex
 @software{dubois_style,
   title = {dubois-style: A W.E.B. Du Bois–inspired Matplotlib style},
-  author = {Your Name},
-  year = {2024},
-  url = {https://github.com/yourname/dubois-style}
+  author = {Shakes-tzd},
+  year = {2025},
+  url = {https://github.com/Shakes-tzd/dubois-style}
 }
 ```
 
