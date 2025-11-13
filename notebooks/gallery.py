@@ -1,3 +1,12 @@
+# /// script
+# requires-python = ">=3.11"
+# dependencies = [
+#     "matplotlib>=3.8",
+#     "numpy>=1.26",
+#     "cycler>=0.12",
+# ]
+# ///
+
 """Gallery of Du Bois–style visualizations using marimo."""
 
 import marimo
@@ -16,20 +25,209 @@ def _():
 def _():
     import numpy as np
     import matplotlib.pyplot as plt
-    from dubois_style import (
-        apply_dubois_style,
-        dubois_legend,
-        DUBOIS_LIGHT_CYCLE,
-        DUBOIS_FAMILIES,
-    )
+    from matplotlib import font_manager
+    from cycler import cycler
+    return cycler, font_manager, np, plt
+
+
+@app.cell
+def _():
+    # ============================================================================
+    # DU BOIS STYLE - INLINED FOR WASM COMPATIBILITY
+    # ============================================================================
+
+    # Du Bois Color Palettes
+    DUBOIS_FAMILIES = {
+        "Warm Tan": {
+            "light": "#d6c1ab",
+            "dark":  "#b69c7e",
+        },
+        "Dusty Pink": {
+            "light": "#e8b7b0",
+            "dark":  "#cc8f88",
+        },
+        "Ochre": {
+            "light": "#e9c057",
+            "dark":  "#c89c33",
+        },
+        "Red": {
+            "light": "#c83737",
+            "dark":  "#9e2424",
+        },
+        "Deep Green": {
+            "light": "#58705c",
+            "dark":  "#35473b",
+        },
+        "Dark Brown": {
+            "light": "#6f5740",
+            "dark":  "#4b3928",
+        },
+        "Deep Navy": {
+            "light": "#3d4b74",
+            "dark":  "#2a3556",
+        },
+    }
+
+    DUBOIS_COLORS_LIGHT = {
+        "warm_tan":   DUBOIS_FAMILIES["Warm Tan"]["light"],
+        "dusty_pink": DUBOIS_FAMILIES["Dusty Pink"]["light"],
+        "ochre":      DUBOIS_FAMILIES["Ochre"]["light"],
+        "red":        DUBOIS_FAMILIES["Red"]["light"],
+        "deep_green": DUBOIS_FAMILIES["Deep Green"]["light"],
+        "dark_brown": DUBOIS_FAMILIES["Dark Brown"]["light"],
+        "deep_navy":  DUBOIS_FAMILIES["Deep Navy"]["light"],
+    }
+
+    DUBOIS_COLORS_DARK = {
+        "warm_tan":   DUBOIS_FAMILIES["Warm Tan"]["dark"],
+        "dusty_pink": DUBOIS_FAMILIES["Dusty Pink"]["dark"],
+        "ochre":      DUBOIS_FAMILIES["Ochre"]["dark"],
+        "red":        DUBOIS_FAMILIES["Red"]["dark"],
+        "deep_green": DUBOIS_FAMILIES["Deep Green"]["dark"],
+        "dark_brown": DUBOIS_FAMILIES["Dark Brown"]["dark"],
+        "deep_navy":  DUBOIS_FAMILIES["Deep Navy"]["dark"],
+    }
+
+    DUBOIS_LIGHT_CYCLE = [
+        DUBOIS_COLORS_LIGHT["warm_tan"],
+        DUBOIS_COLORS_LIGHT["dusty_pink"],
+        DUBOIS_COLORS_LIGHT["ochre"],
+        DUBOIS_COLORS_LIGHT["red"],
+        DUBOIS_COLORS_LIGHT["deep_green"],
+        DUBOIS_COLORS_LIGHT["dark_brown"],
+        DUBOIS_COLORS_LIGHT["deep_navy"],
+    ]
+
+    DUBOIS_DARK_CYCLE = [
+        DUBOIS_COLORS_DARK["warm_tan"],
+        DUBOIS_COLORS_DARK["dusty_pink"],
+        DUBOIS_COLORS_DARK["ochre"],
+        DUBOIS_COLORS_DARK["red"],
+        DUBOIS_COLORS_DARK["deep_green"],
+        DUBOIS_COLORS_DARK["dark_brown"],
+        DUBOIS_COLORS_DARK["deep_navy"],
+    ]
+
+    DUBOIS_CATEGORICAL_CYCLE = [
+        DUBOIS_COLORS_LIGHT["deep_navy"],
+        DUBOIS_COLORS_LIGHT["ochre"],
+        DUBOIS_COLORS_LIGHT["deep_green"],
+        DUBOIS_COLORS_LIGHT["red"],
+        DUBOIS_COLORS_LIGHT["warm_tan"],
+        DUBOIS_COLORS_LIGHT["dusty_pink"],
+        DUBOIS_COLORS_LIGHT["dark_brown"],
+    ]
+
     return (
+        DUBOIS_CATEGORICAL_CYCLE,
+        DUBOIS_COLORS_DARK,
+        DUBOIS_COLORS_LIGHT,
+        DUBOIS_DARK_CYCLE,
         DUBOIS_FAMILIES,
         DUBOIS_LIGHT_CYCLE,
-        apply_dubois_style,
-        dubois_legend,
-        np,
-        plt,
     )
+
+
+@app.cell
+def _(cycler, font_manager, plt):
+    # Du Bois Style Functions
+
+    def apply_dubois_style(
+        *,
+        cycle: str = "light",
+        show_x_axis: bool = False,
+        show_y_axis: bool = False,
+        use_contrast_colors: bool = False,
+        base_font: str | list[str] = "DejaVu Sans",
+        custom_font_paths: list[str] | None = None,
+    ):
+        """Apply a DuBois-inspired Matplotlib style globally."""
+        # Import color cycles
+        from __main__ import (
+            DUBOIS_CATEGORICAL_CYCLE,
+            DUBOIS_DARK_CYCLE,
+            DUBOIS_LIGHT_CYCLE,
+        )
+
+        # Register custom font files if provided
+        if custom_font_paths is not None:
+            for font_path in custom_font_paths:
+                font_manager.fontManager.addfont(font_path)
+
+        if use_contrast_colors:
+            color_cycle = DUBOIS_CATEGORICAL_CYCLE
+        else:
+            if cycle == "light":
+                color_cycle = DUBOIS_LIGHT_CYCLE
+            elif cycle == "dark":
+                color_cycle = DUBOIS_DARK_CYCLE
+            else:
+                raise ValueError("cycle must be 'light' or 'dark'")
+
+        plt.rcParams.update({
+            # Transparency & backgrounds
+            "figure.facecolor": "none",
+            "axes.facecolor": "none",
+            "savefig.facecolor": "none",
+            "axes.unicode_minus": False,
+
+            # Color cycle
+            "axes.prop_cycle": cycler(color=color_cycle),
+
+            # Axes & spines
+            "axes.edgecolor": "#333333",
+            "axes.spines.top": False,
+            "axes.spines.right": False,
+            "axes.spines.left": show_y_axis,
+            "axes.spines.bottom": show_x_axis,
+            "axes.grid": False,
+
+            # Ticks
+            "xtick.bottom": show_x_axis,
+            "ytick.left": show_y_axis,
+            "xtick.labelsize": 10,
+            "ytick.labelsize": 10,
+
+            # Text & legend
+            "font.family": [base_font] if isinstance(base_font, str) else base_font,
+            "text.color": "#111111",
+            "axes.labelcolor": "#111111",
+            "xtick.color": "#666666",
+            "ytick.color": "#666666",
+            "legend.frameon": False,
+            "legend.labelcolor": "#666666",
+
+            # Lines & patches
+            "lines.linewidth": 2.0,
+            "patch.edgecolor": "#111111",
+        })
+
+
+    def dubois_legend(
+        ax,
+        *args,
+        outside: bool = True,
+        outside_pad: float = 0.02,
+        **kwargs,
+    ):
+        """Convenience wrapper for ax.legend() with DuBois-friendly defaults."""
+        if outside:
+            loc = kwargs.pop("loc", "center left")
+            bbox = kwargs.pop("bbox_to_anchor", (1.0 + outside_pad, 0.5))
+            return ax.legend(
+                *args,
+                loc=loc,
+                bbox_to_anchor=bbox,
+                borderaxespad=0.0,
+                frameon=False,
+                **kwargs,
+            )
+        else:
+            kwargs.setdefault("loc", "best")
+            kwargs.setdefault("frameon", False)
+            return ax.legend(*args, **kwargs)
+
+    return apply_dubois_style, dubois_legend
 
 
 @app.cell
@@ -729,7 +927,7 @@ def _(mo):
 
     - **Try it yourself**: Modify the style parameters and see the results
     - **Explore the code**: Each example is defined as a Python function above
-    - **Read the docs**: Check out `FONTS.md` for font options and `README.md` for API details
+    - **Read the docs**: Check out the GitHub repository for full documentation
     - **Create your own**: Use the Du Bois style in your own matplotlib visualizations
 
     ---

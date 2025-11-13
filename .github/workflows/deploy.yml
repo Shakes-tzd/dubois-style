@@ -26,10 +26,8 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install dependencies
-        run: |
-          pip install marimo
-          pip install -e .
+      - name: Install marimo
+        run: pip install marimo
 
       - name: Export marimo gallery to HTML-WASM
         run: |
