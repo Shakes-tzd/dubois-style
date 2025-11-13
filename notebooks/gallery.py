@@ -1,9 +1,9 @@
 # /// script
 # requires-python = ">=3.11"
 # dependencies = [
-#     "matplotlib>=3.8",
-#     "numpy>=1.26",
-#     "cycler>=0.12",
+#     "matplotlib",
+#     "numpy",
+#     "cycler",
 # ]
 # ///
 
@@ -465,7 +465,7 @@ def _(DUBOIS_FAMILIES, DUBOIS_LIGHT_CYCLE, dubois_legend, np, plt):
         bp = ax_box.boxplot(
             data,
             patch_artist=True,
-            tick_labels=["Set 1", "Set 2", "Set 3"],
+            labels=["Set 1", "Set 2", "Set 3"],
         )
 
         for patch, color in zip(bp["boxes"], DUBOIS_LIGHT_CYCLE):
